@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://no-gas-labs-official.github.io/recursive-artifact-engine/schemas/receipt-v1.json",
+  "title": "Recursive Artifact Engine Verification Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "receipt_version", "verifier", "artifact", "observation", "receipt_sha256"],
+  "properties": {
+    "schema": {"const": "https://no-gas-labs-official.github.io/recursive-artifact-engine/schemas/receipt-v1.json"},
+    "receipt_version": {"const": 1},
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "implementation", "algorithm"],
+      "properties": {
+        "name": {"const": "recursive-artifact-engine"},
+        "implementation": {"const": "minimal-verifier"},
+        "algorithm": {"const": "sha256"}
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "extension", "uri", "byte_length", "sha256"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "extension": {"type": ["string", "null"]},
+        "uri": {"type": "string", "format": "uri"},
+        "byte_length": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "observed_at", "source", "model_assertion_trusted"],
+      "properties": {
+        "status": {"const": "OBSERVED"},
+        "observed_at": {"type": "string", "format": "date-time"},
+        "source": {"const": "local-filesystem-read"},
+        "model_assertion_trusted": {"const": false}
+      }
+    },
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}
