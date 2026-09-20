@@ -1,6 +1,6 @@
 {
   "name": "recursive-artifact-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Minimal provenance verifier for the Recursive Artifact Engine specification.",
   "type": "module",

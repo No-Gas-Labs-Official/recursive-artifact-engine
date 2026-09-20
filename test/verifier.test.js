@@ -55,10 +55,10 @@ test('a valid receipt backs file existence/integrity but does not prove claim se
   const receipt = await verifyArtifact(fixture, { observedAt: fixedObservedAt });
   const result = adjudicateModelClaim('The artifact is factually correct.', receipt);
 
-  assert.equal(result.status, 'EVIDENCE_BACKED');
+  assert.equal(result.status, 'PROPOSED');
   assert.equal(result.accepted_as_observed_state, false);
-  assert.equal(result.circuit_breaker, 'CLOSED');
-  assert.equal(result.reason, 'receipt_valid_but_claim_semantics_not_independently_verified');
+  assert.equal(result.circuit_breaker, 'OPEN');
+  assert.equal(result.reason, 'receipt_self_integrity_only_claim_not_verified');
 });
 
 test('CLI verify prints a parseable receipt', async () => {
