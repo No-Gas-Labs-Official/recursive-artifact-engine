@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { open } from 'node:fs/promises';
 import { basename, extname, resolve } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
@@ -37,11 +37,12 @@ function canonicalReceiptPayload(receipt) {
 
 export async function verifyArtifact(input, options = {}) {
   const artifactPath = normalizeArtifactPath(input);
-  const [bytes, metadata] = await Promise.all([readFile(artifactPath), stat(artifactPath)]);
-
-  if (!metadata.isFile()) {
-    throw new Error(`artifact is not a regular file: ${artifactPath}`);
-  }
+  const handle = await open(artifactPath, 'r');
+  let bytes;
+  try {
+    if (!(await handle.stat()).isFile()) throw new Error('artifact is not a regular file');
+    bytes = await handle.readFile();
+  } finally { await handle.close(); }
 
   const observedAt = options.observedAt ?? new Date().toISOString();
   const artifactDigest = sha256(bytes);
@@ -94,6 +95,24 @@ export function validateReceipt(receipt) {
     return { valid: false, reason: 'artifact_digest_invalid' };
   }
 
+  const keys = (o, expected) => o && typeof o === 'object' && !Array.isArray(o)
+    && Object.keys(o).sort().join(',') === expected.sort().join(',');
+  const a = receipt.artifact, v = receipt.verifier, o = receipt.observation;
+  let uriValid = false;
+  try { uriValid = new URL(a.uri).protocol === 'file:'; } catch {}
+  if (!keys(receipt, ['schema','receipt_version','verifier','artifact','observation','receipt_sha256'])
+    || !keys(a, ['name','extension','uri','byte_length','sha256'])
+    || !keys(v, ['name','implementation','algorithm'])
+    || !keys(o, ['status','observed_at','source','model_assertion_trusted'])
+    || typeof a.name !== 'string' || !a.name.length || !uriValid
+    || !(a.extension === null || typeof a.extension === 'string')
+    || !Number.isSafeInteger(a.byte_length) || a.byte_length < 0
+    || v.name !== 'recursive-artifact-engine' || v.implementation !== 'minimal-verifier'
+    || v.algorithm !== 'sha256' || o.source !== 'local-filesystem-read'
+    || typeof o.observed_at !== 'string' || !Number.isFinite(Date.parse(o.observed_at))) {
+    return { valid: false, reason: 'receipt_structure_invalid' };
+  }
+
   const expectedReceiptDigest = sha256(Buffer.from(canonicalReceiptPayload(receipt)));
   if (receipt.receipt_sha256 !== expectedReceiptDigest) {
     return { valid: false, reason: 'receipt_integrity_failed' };
@@ -120,10 +139,10 @@ export function adjudicateModelClaim(claim, receipt) {
 
   return {
     claim,
-    status: 'EVIDENCE_BACKED',
+    status: 'PROPOSED',
     accepted_as_observed_state: false,
-    circuit_breaker: 'CLOSED',
-    reason: 'receipt_valid_but_claim_semantics_not_independently_verified',
+    circuit_breaker: 'OPEN',
+    reason: 'receipt_self_integrity_only_claim_not_verified',
     receipt_sha256: receipt.receipt_sha256,
     artifact_sha256: receipt.artifact.sha256
   };
