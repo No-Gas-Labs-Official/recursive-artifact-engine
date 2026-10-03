@@ -1,0 +1,48 @@
+{
+  "source": {
+    "type": "github-actions",
+    "repository": "No-Gas-Labs-Official/ai-guild-hardened-v0.2",
+    "commit_sha": "34f3f98b69a9f26811112ba3ec30693808dae90e",
+    "observed_at": "2026-10-03T04:49:00Z"
+  },
+  "workflow_runs": [
+    {
+      "id": 37088554044,
+      "name": "CI",
+      "run_number": 64,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 37088554048,
+      "name": "Org CI",
+      "run_number": 59,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "check_runs_summary": {
+    "total": 9,
+    "completed_success": 9
+  },
+  "merge_attempt": {
+    "method": "squash",
+    "result": "rejected",
+    "http_status": 405,
+    "message": "3 of 3 required status checks are expected."
+  },
+  "adjudication_targets": [
+    {
+      "claim": "The observed CI and Org CI workflow runs completed successfully.",
+      "expected": true
+    },
+    {
+      "claim": "The pull request satisfied branch-protection required checks.",
+      "expected": false
+    },
+    {
+      "claim": "The pull request was merged.",
+      "expected": false
+    }
+  ]
+}

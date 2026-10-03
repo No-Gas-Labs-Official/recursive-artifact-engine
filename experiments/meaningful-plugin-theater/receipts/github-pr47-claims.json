@@ -1,0 +1,22 @@
+[
+  {
+    "kind": "json.pointer",
+    "pointer": "/workflow_runs/0/conclusion",
+    "equals": "success"
+  },
+  {
+    "kind": "json.pointer",
+    "pointer": "/workflow_runs/1/conclusion",
+    "equals": "success"
+  },
+  {
+    "kind": "json.pointer",
+    "pointer": "/merge_attempt/result",
+    "equals": "rejected"
+  },
+  {
+    "kind": "json.pointer",
+    "pointer": "/merge_attempt/message",
+    "equals": "3 of 3 required status checks are expected."
+  }
+]

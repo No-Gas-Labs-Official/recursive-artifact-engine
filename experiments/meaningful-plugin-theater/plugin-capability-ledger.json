@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "performance": "001-audit-by-ordeal",
+  "principle": "A successful invocation is not evidence of usefulness; consequential mutations require observed external state.",
+  "capabilities": [
+    {"plugin":"GitHub","observe":true,"create":true,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"CI and Org CI success observed; merge rejection independently observed"},
+    {"plugin":"Google Drive","observe":true,"create":true,"mutate":true,"verify":false,"delegate":false,"verdict":"KEEP","evidence":"historical NGL assertion corpus retrieved"},
+    {"plugin":"Gmail","observe":true,"create":true,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"external completion receipts surfaced"},
+    {"plugin":"Context7","observe":true,"create":false,"mutate":false,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"current technical documentation adjudicated reusable-workflow access rule"},
+    {"plugin":"Ubersuggest","observe":true,"create":false,"mutate":false,"verify":false,"delegate":false,"verdict":"KEEP","evidence":"search-demand measurements returned"},
+    {"plugin":"Metricool","observe":true,"create":true,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"connected attention-measurement surface and baseline returned"},
+    {"plugin":"Stripe","observe":true,"create":true,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"NGL commerce surface observed"},
+    {"plugin":"Canva","observe":true,"create":true,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"Performance 001 design created"},
+    {"plugin":"Manus","observe":true,"create":true,"mutate":false,"verify":false,"delegate":true,"verdict":"KEEP","evidence":"independent research task accepted"},
+    {"plugin":"Plugin Management","observe":true,"create":false,"mutate":true,"verify":true,"delegate":false,"verdict":"KEEP","evidence":"plugin permission state inspected"},
+    {"plugin":"Hugging Face","observe":true,"create":true,"mutate":true,"verify":false,"delegate":true,"verdict":"PROBATION","evidence":"authentication worked; advertised discovery surface failed"},
+    {"plugin":"Tavily","observe":true,"create":false,"mutate":false,"verify":false,"delegate":false,"verdict":"REMOVE_CANDIDATE","evidence":"interactive authorization blocked useful execution"},
+    {"plugin":"Hunter","observe":true,"create":false,"mutate":false,"verify":false,"delegate":false,"verdict":"REMOVE_CANDIDATE","evidence":"account restricted"},
+    {"plugin":"OpenAI Platform","observe":true,"create":true,"mutate":true,"verify":false,"delegate":false,"verdict":"REMOVE_CANDIDATE","evidence":"useful target request rejected"},
+    {"plugin":"Finances","observe":true,"create":false,"mutate":false,"verify":true,"delegate":false,"verdict":"REMOVE_CANDIDATE","evidence":"no connected financial observation surface"}
+  ]
+}

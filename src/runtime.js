@@ -7,7 +7,7 @@ import { canonical, objectId, digest, readBounded, observeBytes, checkClaim } fr
 import { validateAuthority, validRevocation } from './authority.js';
 
 const execute = promisify(execFile);
-const roots = ['src', 'scripts', 'schemas', 'test', 'integration'];
+const roots = ['src', 'scripts', 'schemas', 'test', 'integration', 'experiments'];
 const safePath = p => typeof p === 'string' && p.length && !isAbsolute(p) && !p.includes('\\') && !p.split('/').some(v => !v || v === '.' || v === '..');
 
 export async function sourceManifest(root) {

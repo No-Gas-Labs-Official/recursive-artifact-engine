@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ngl.pr-satisfaction.v1",
+  "title": "NGL Pull Request Satisfaction Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "repository",
+    "pull_request",
+    "requirements"
+  ],
+  "properties": {
+    "schema": {
+      "const": "ngl.pr-satisfaction.v1"
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1
+    },
+    "pull_request": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "governance": {
+      "type": "object"
+    },
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "checks"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "checks": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "observation_id",
+                "claim"
+              ],
+              "properties": {
+                "observation_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "claim": {
+                  "type": "object",
+                  "required": [
+                    "kind"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "execution_class": {
+      "type": "string",
+      "enum": [
+        "ANDROID_RUNTIME",
+        "SUPPORTING_INFRASTRUCTURE",
+        "LEGACY_EXPERIMENT"
+      ]
+    },
+    "android_runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "type": "boolean"
+        },
+        "artifact_observation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "runtime_observation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "VERIFIED",
+            "REFUTED",
+            "UNVERIFIABLE",
+            "UNSUPPORTED"
+          ]
+        }
+      }
+    }
+  }
+}
