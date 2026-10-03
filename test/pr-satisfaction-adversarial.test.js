@@ -19,7 +19,8 @@ test('claim-specific execution can satisfy a requirement while generic green CI 
   };
   const pr27 = adjudicateSatisfaction(contract, [{
     observation_id: 'pr27',
-    kind: 'json',
+    extractor: 'rae-json-v1',
+    artifact: { sha256: 'fixture-pr27', byte_length: 0 },
     extraction: { claim_specific_execution: true, generic_ci_green: true }
   }]);
   assert.equal(pr27.status, 'VERIFIED');
@@ -34,7 +35,8 @@ test('claim-specific execution can satisfy a requirement while generic green CI 
   };
   const pr28 = adjudicateSatisfaction(pr28Contract, [{
     observation_id: 'pr28',
-    kind: 'json',
+    extractor: 'rae-json-v1',
+    artifact: { sha256: 'fixture-pr28', byte_length: 0 },
     extraction: { claim_specific_execution: false, generic_ci_green: true }
   }]);
   assert.equal(pr28.status, 'REFUTED');
