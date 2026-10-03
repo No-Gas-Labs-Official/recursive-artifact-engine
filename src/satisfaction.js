@@ -20,9 +20,19 @@ export function adjudicateSatisfaction(contract, observations) {
     return { id: requirement.id, status, checks };
   });
   const statuses = requirements.map(r => r.status);
-  const status = statuses.includes('REFUTED') ? 'REFUTED'
+  let status = statuses.includes('REFUTED') ? 'REFUTED'
     : statuses.includes('UNSUPPORTED') ? 'UNSUPPORTED'
     : statuses.every(s => s === 'VERIFIED') ? 'VERIFIED' : 'UNVERIFIABLE';
+
+  const androidRuntime = contract.execution_class === 'ANDROID_RUNTIME'
+    ? (contract.android_runtime ?? { required: true, status: 'UNVERIFIABLE' })
+    : contract.android_runtime;
+
+  if (contract.execution_class === 'ANDROID_RUNTIME' && androidRuntime?.status !== 'VERIFIED' && status === 'VERIFIED') {
+    status = androidRuntime?.status === 'REFUTED' ? 'REFUTED'
+      : androidRuntime?.status === 'UNSUPPORTED' ? 'UNSUPPORTED'
+      : 'UNVERIFIABLE';
+  }
   const payload = {
     schema: 'ngl.pr-satisfaction-manifest.v1',
     repository: contract.repository,
@@ -31,7 +41,12 @@ export function adjudicateSatisfaction(contract, observations) {
     status,
     requirements,
     governance: contract.governance ?? { status: 'UNVERIFIABLE' },
-    unresolved: requirements.filter(r => r.status !== 'VERIFIED').map(r => r.id)
+    execution_class: contract.execution_class ?? 'SUPPORTING_INFRASTRUCTURE',
+    android_runtime: androidRuntime,
+    unresolved: [
+      ...requirements.filter(r => r.status !== 'VERIFIED').map(r => r.id),
+      ...(contract.execution_class === 'ANDROID_RUNTIME' && androidRuntime?.status !== 'VERIFIED' ? ['android-runtime-evidence'] : [])
+    ]
   };
   return { ...payload, manifest_id: objectId(payload) };
 }
